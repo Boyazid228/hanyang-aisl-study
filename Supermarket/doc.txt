@@ -1,0 +1,121 @@
+ProductInventory Explanation
+
+Overview
+This implementation manages supermarket inventory where:
+- the freshest product is sold first
+- expired products cannot be sold
+- inventory is returned from newest to oldest
+
+Data Structure
+The inventory is implemented using a Python list.
+
+Each product is stored as:
+[current_timestamp, id, expires_in]
+
+Example:
+[1001, 1, 100]
+
+Meaning:
+- added at timestamp 1001
+- product id = 1
+- expires after 100 seconds
+
+Expiration Logic
+A product expires at:
+
+expire_time = current_timestamp + expires_in
+
+The product becomes unavailable immediately when:
+expire_time <= current_timestamp
+
+Therefore, valid products satisfy:
+
+expire_time > current_timestamp
+
+--------------------------------------------------
+
+add_product()
+
+Purpose:
+Adds a new product to the inventory.
+
+Implementation:
+inventory.append([current_timestamp, id, expires_in])
+
+Time Complexity:
+O(1)
+
+Reason:
+Appending to the end of the list is constant time.
+
+--------------------------------------------------
+
+sell_product()
+
+Purpose:
+Sell the freshest non-expired product.
+
+Logic:
+1. Start from the newest product (end of list)
+2. Remove expired products
+3. Return the first valid product id
+4. Return -1 if no valid product exists
+
+Reasoning:
+Because timestamps are monotonically increasing,
+the newest product is always at the end of the list.
+
+
+--------------------------------------------------
+
+get_inventory()
+
+Purpose:
+Return all valid products from newest to oldest.
+
+Logic:
+1. Traverse the inventory in reverse order
+2. Check expiration
+3. Add only valid product ids to result list
+
+Reasoning:
+Products are appended in chronological order,
+so reversing the list gives freshest-first order
+without requiring sorting.
+
+Time Complexity:
+O(n)
+
+--------------------------------------------------
+
+Why Sorting is Not Needed
+
+The problem guarantees:
+"current_timestamp is monotonically increasing"
+
+Therefore:
+- insertion order already matches timestamp order
+- newest products are always at the end
+
+Because of this:
+- reverse traversal is sufficient
+- additional sorting would be unnecessary
+
+--------------------------------------------------
+
+Advantages of This Approach
+
+- Simple implementation
+- Efficient append operation
+- No unnecessary sorting
+- Correct expiration handling
+- Uses stack-like behavior for freshest-first selling
+
+--------------------------------------------------
+
+Edge Cases Handled
+
+- Empty inventory
+- All products expired
+- Multiple expired products at the end
+- Expiration exactly at current_timestamp
